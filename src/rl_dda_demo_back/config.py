@@ -9,7 +9,7 @@ class Settings(BaseSettings):
 
     app_name: str = "rl-dda-demo-back"
 
-    # Database: mysql+asyncmy
+    # Database: mysql+aiomysql (pure-Python for Windows compatibility)
     db_host: str = "127.0.0.1"
     db_port: int = 3306
     db_user: str = "app"
@@ -27,7 +27,7 @@ class Settings(BaseSettings):
         if self.database_url:
             return self.database_url
         return (
-            f"mysql+asyncmy://{self.db_user}:{self.db_password}@{self.db_host}:{self.db_port}/{self.db_name}"
+            f"mysql+aiomysql://{self.db_user}:{self.db_password}@{self.db_host}:{self.db_port}/{self.db_name}"
         )
 
 

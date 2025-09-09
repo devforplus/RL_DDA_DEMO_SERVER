@@ -12,10 +12,10 @@ dependencies = [
     "pydantic-settings==2.5.2",
     "sqlalchemy==2.0.35",
     "sqlalchemy-utils==0.41.2",
-    "asyncmy==0.2.9",
     "alembic==1.13.2",
     "greenlet==3.1.1",
     "python-multipart==0.0.12",
+    "aiomysql==0.2.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"

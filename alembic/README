@@ -1,0 +1,1 @@
+Async MySQL configuration using mysql+aiomysql. Environment will read APP_DATABASE_URL if provided.

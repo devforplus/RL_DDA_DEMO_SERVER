@@ -42,5 +42,3 @@ class EventsBatchRequest(BaseModel):
     session_id: str
     request_id: Optional[str] = None
     events: list[EventsBatchItem]
-
-
