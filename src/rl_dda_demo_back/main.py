@@ -7,7 +7,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from .config import settings
 from .api.routes.health import router as health_router
 from .api.routes.participants import router as participants_router
-from .api.routes.consent import router as consent_router
 from .api.routes.sessions import router as sessions_router
 from .api.routes.events import router as events_router
 from .db.session import engine
@@ -37,7 +36,6 @@ def create_app() -> FastAPI:
     # Routers
     app.include_router(health_router)
     app.include_router(participants_router, prefix="/api")
-    app.include_router(consent_router, prefix="/api")
     app.include_router(sessions_router, prefix="/api")
     app.include_router(events_router, prefix="/api")
 

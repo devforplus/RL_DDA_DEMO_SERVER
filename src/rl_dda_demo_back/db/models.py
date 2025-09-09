@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 from typing import Any, Optional
 
-from sqlalchemy import JSON, BigInteger, CheckConstraint, DateTime, Enum, ForeignKey, Index, Integer, String, Text
+from sqlalchemy import JSON, BigInteger, DateTime, ForeignKey, Index, Integer, String, Text
 from sqlalchemy.dialects.mysql import CHAR
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -20,8 +20,6 @@ class Participant(Base):
 
     id: Mapped[str] = mapped_column(CHAR(32), primary_key=True, default=uuid_pk)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.utcnow, nullable=False)
-    consent_version: Mapped[Optional[str]] = mapped_column(String(32))
-    consent_accepted_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     locale: Mapped[Optional[str]] = mapped_column(String(16))
     user_agent_hash: Mapped[Optional[str]] = mapped_column(String(64))
     cohort: Mapped[Optional[str]] = mapped_column(String(32))
@@ -101,14 +99,5 @@ class Assignment(Base):
     participant_id: Mapped[str] = mapped_column(CHAR(32), ForeignKey("participants.id"), nullable=False)
     arm: Mapped[str] = mapped_column(String(32), nullable=False)
     assigned_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.utcnow, nullable=False)
-
-
-class Consent(Base):
-    __tablename__ = "consents"
-
-    version: Mapped[str] = mapped_column(String(32), primary_key=True)
-    document_url: Mapped[str] = mapped_column(Text, nullable=False)
-    active: Mapped[bool] = mapped_column()
-    published_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.utcnow, nullable=False)
 
 

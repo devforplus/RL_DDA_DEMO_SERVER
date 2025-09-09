@@ -7,11 +7,6 @@ class Participant(BaseModel):
     id: str
 
 
-class ConsentAcceptRequest(BaseModel):
-    participant_id: str
-    consent_version: str
-
-
 class SessionStartRequest(BaseModel):
     participant_id: str
     mode: Literal["human", "agent"]
