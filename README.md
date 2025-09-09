@@ -48,17 +48,19 @@ Environment variables (prefixed with `APP_`):
 
 ## Database and migrations
 
-- Start MySQL via Docker Compose:
+- Start MySQL via Docker Compose (if Docker available):
 
 ```bash
 docker compose up -d db
 ```
 
-- Create initial migration and upgrade:
+- Create initial migration and upgrade (requires DB running):
 
 ```bash
 rye run alembic revision -m "init schema v1" --autogenerate
 rye run alembic upgrade head
 ```
+
+If Docker is not available on your machine, install MySQL locally and set `APP_DATABASE_URL` accordingly.
 
 

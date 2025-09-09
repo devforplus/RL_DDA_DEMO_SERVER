@@ -22,6 +22,9 @@ class Settings(BaseSettings):
     # CORS
     cors_origins: List[str] = []
 
+    # Ingest token
+    ingest_secret: str = "change-me"
+
     @property
     def sqlalchemy_dsn(self) -> str:
         if self.database_url:
