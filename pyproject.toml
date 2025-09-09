@@ -1,0 +1,38 @@
+[project]
+name = "rl-dda-demo-back"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "dlwlgusdev", email = "dlwlgusdev@gmail.com" }
+]
+dependencies = [
+    "fastapi==0.114.2",
+    "uvicorn[standard]==0.30.6",
+    "pydantic==2.9.2",
+    "pydantic-settings==2.5.2",
+    "sqlalchemy==2.0.35",
+    "sqlalchemy-utils==0.41.2",
+    "asyncmy==0.2.9",
+    "alembic==1.13.2",
+    "greenlet==3.1.1",
+    "python-multipart==0.0.12",
+]
+readme = "README.md"
+requires-python = ">= 3.8"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = []
+
+[tool.rye.scripts]
+dev = { cmd = "uvicorn rl_dda_demo_back.main:app --reload" }
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/rl_dda_demo_back"]
