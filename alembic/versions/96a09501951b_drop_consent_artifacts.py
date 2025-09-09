@@ -5,6 +5,7 @@ Revises: 45908820146f
 Create Date: 2025-09-09 17:23:53.632421
 
 """
+
 from typing import Sequence, Union
 
 from alembic import op
@@ -12,8 +13,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '96a09501951b'
-down_revision: Union[str, None] = '45908820146f'
+revision: str = "96a09501951b"
+down_revision: Union[str, None] = "45908820146f"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -40,8 +41,12 @@ def upgrade() -> None:
 def downgrade() -> None:
     # Recreate dropped columns and table (best-effort)
     with op.batch_alter_table("participants") as bop:
-        bop.add_column(sa.Column("consent_version", sa.String(length=32), nullable=True))
-        bop.add_column(sa.Column("consent_accepted_at", sa.DateTime(timezone=True), nullable=True))
+        bop.add_column(
+            sa.Column("consent_version", sa.String(length=32), nullable=True)
+        )
+        bop.add_column(
+            sa.Column("consent_accepted_at", sa.DateTime(timezone=True), nullable=True)
+        )
     op.create_table(
         "consents",
         sa.Column("version", sa.String(length=32), primary_key=True),

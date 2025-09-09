@@ -4,7 +4,16 @@ import uuid
 from datetime import datetime
 from typing import Any, Optional
 
-from sqlalchemy import JSON, BigInteger, DateTime, ForeignKey, Index, Integer, String, Text
+from sqlalchemy import (
+    JSON,
+    BigInteger,
+    DateTime,
+    ForeignKey,
+    Index,
+    Integer,
+    String,
+    Text,
+)
 from sqlalchemy.dialects.mysql import CHAR
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -19,7 +28,9 @@ class Participant(Base):
     __tablename__ = "participants"
 
     id: Mapped[str] = mapped_column(CHAR(32), primary_key=True, default=uuid_pk)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.utcnow, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=datetime.utcnow, nullable=False
+    )
     locale: Mapped[Optional[str]] = mapped_column(String(16))
     user_agent_hash: Mapped[Optional[str]] = mapped_column(String(64))
     cohort: Mapped[Optional[str]] = mapped_column(String(32))
@@ -31,36 +42,48 @@ class Session(Base):
     __tablename__ = "sessions"
 
     id: Mapped[str] = mapped_column(CHAR(32), primary_key=True, default=uuid_pk)
-    participant_id: Mapped[str] = mapped_column(CHAR(32), ForeignKey("participants.id"), nullable=False, index=True)
+    participant_id: Mapped[str] = mapped_column(
+        CHAR(32), ForeignKey("participants.id"), nullable=False, index=True
+    )
 
     mode: Mapped[str] = mapped_column(String(8), nullable=False)  # 'human' | 'agent'
-    agent_skill: Mapped[Optional[str]] = mapped_column(String(16))  # beginner/intermediate/advanced
+    agent_skill: Mapped[Optional[str]] = mapped_column(
+        String(16)
+    )  # beginner/intermediate/advanced
     game_version: Mapped[Optional[str]] = mapped_column(String(64))
     model_version: Mapped[Optional[str]] = mapped_column(String(64))
     seed: Mapped[Optional[int]] = mapped_column(Integer)
 
-    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.utcnow, nullable=False)
+    started_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=datetime.utcnow, nullable=False
+    )
     ended_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     duration_ms: Mapped[Optional[int]] = mapped_column(Integer)
     result: Mapped[Optional[dict[str, Any]]] = mapped_column(JSON)
 
     participant: Mapped[Participant] = relationship(back_populates="sessions")
     events: Mapped[list[Event]] = relationship(back_populates="session")
-    replay: Mapped[Optional[Replay]] = relationship(back_populates="session", uselist=False)
+    replay: Mapped[Optional[Replay]] = relationship(
+        back_populates="session", uselist=False
+    )
 
 
 class Event(Base):
     __tablename__ = "events"
 
-    id: Mapped[int] = mapped_column(BigInteger().with_variant(BigInteger, "mysql"), primary_key=True, autoincrement=True)
-    session_id: Mapped[str] = mapped_column(CHAR(32), ForeignKey("sessions.id"), nullable=False, index=True)
+    id: Mapped[int] = mapped_column(
+        BigInteger().with_variant(BigInteger, "mysql"),
+        primary_key=True,
+        autoincrement=True,
+    )
+    session_id: Mapped[str] = mapped_column(
+        CHAR(32), ForeignKey("sessions.id"), nullable=False, index=True
+    )
     t_ms: Mapped[int] = mapped_column(Integer, nullable=False)
     type: Mapped[str] = mapped_column(String(32), nullable=False)
     payload: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False)
 
-    __table_args__ = (
-        Index("ix_events_session_t", "session_id", "t_ms"),
-    )
+    __table_args__ = (Index("ix_events_session_t", "session_id", "t_ms"),)
 
     session: Mapped[Session] = relationship(back_populates="events")
 
@@ -69,7 +92,9 @@ class Replay(Base):
     __tablename__ = "replays"
 
     id: Mapped[str] = mapped_column(CHAR(32), primary_key=True, default=uuid_pk)
-    session_id: Mapped[str] = mapped_column(CHAR(32), ForeignKey("sessions.id"), nullable=False, unique=True)
+    session_id: Mapped[str] = mapped_column(
+        CHAR(32), ForeignKey("sessions.id"), nullable=False, unique=True
+    )
     storage_url: Mapped[str] = mapped_column(Text, nullable=False)
     frames_count: Mapped[Optional[int]] = mapped_column(Integer)
     duration_ms: Mapped[Optional[int]] = mapped_column(Integer)
@@ -77,7 +102,9 @@ class Replay(Base):
     schema_version: Mapped[Optional[str]] = mapped_column(String(16))
     generated_by: Mapped[Optional[str]] = mapped_column(String(16))
     checksum: Mapped[Optional[str]] = mapped_column(String(64))
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.utcnow, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=datetime.utcnow, nullable=False
+    )
 
     session: Mapped[Session] = relationship(back_populates="replay")
 
@@ -88,16 +115,22 @@ class Experiment(Base):
     id: Mapped[str] = mapped_column(CHAR(32), primary_key=True, default=uuid_pk)
     name: Mapped[str] = mapped_column(String(128), nullable=False)
     config: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False, default=dict)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.utcnow, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=datetime.utcnow, nullable=False
+    )
 
 
 class Assignment(Base):
     __tablename__ = "assignments"
 
     id: Mapped[str] = mapped_column(CHAR(32), primary_key=True, default=uuid_pk)
-    experiment_id: Mapped[str] = mapped_column(CHAR(32), ForeignKey("experiments.id"), nullable=False)
-    participant_id: Mapped[str] = mapped_column(CHAR(32), ForeignKey("participants.id"), nullable=False)
+    experiment_id: Mapped[str] = mapped_column(
+        CHAR(32), ForeignKey("experiments.id"), nullable=False
+    )
+    participant_id: Mapped[str] = mapped_column(
+        CHAR(32), ForeignKey("participants.id"), nullable=False
+    )
     arm: Mapped[str] = mapped_column(String(32), nullable=False)
-    assigned_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.utcnow, nullable=False)
-
-
+    assigned_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=datetime.utcnow, nullable=False
+    )

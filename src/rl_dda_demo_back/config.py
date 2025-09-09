@@ -25,6 +25,13 @@ class Settings(BaseSettings):
     # Ingest token
     ingest_secret: str = "change-me"
 
+    # Storage (S3/MinIO)
+    s3_endpoint_url: Optional[str] = None
+    s3_region_name: Optional[str] = None
+    s3_access_key_id: Optional[str] = None
+    s3_secret_access_key: Optional[str] = None
+    s3_bucket: Optional[str] = None
+
     @property
     def sqlalchemy_dsn(self) -> str:
         if self.database_url:
