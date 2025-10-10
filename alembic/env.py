@@ -21,9 +21,9 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from rl_dda_demo_back.db.base import Base
-from rl_dda_demo_back import db as _db_pkg  # ensure package import
-from rl_dda_demo_back.db import models  # noqa: F401 - import models for metadata
+from src.db.base import Base
+from src import db as _db_pkg  # ensure package import
+from src.db import models  # noqa: F401 - import models for metadata
 
 target_metadata = Base.metadata
 
