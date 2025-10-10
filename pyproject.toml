@@ -30,10 +30,10 @@ managed = true
 dev-dependencies = []
 
 [tool.rye.scripts]
-dev = { cmd = "uvicorn rl_dda_demo_back.main:app --reload" }
+dev = { cmd = "uvicorn src.main:app --reload" }
 
 [tool.hatch.metadata]
 allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/rl_dda_demo_back"]
+packages = ["src"]
