@@ -28,7 +28,7 @@ APP_DB_NAME=rldda
 3) Run dev server
 
 ```bash
-rye run uvicorn rl_dda_demo_back.main:app --reload
+rye run uvicorn src.main:app --reload
 ```
 
 ## Configuration
@@ -41,10 +41,10 @@ Environment variables (prefixed with `APP_`):
 
 ## Project layout
 
-- `src/rl_dda_demo_back/main.py`: FastAPI app entry
-- `src/rl_dda_demo_back/config.py`: Settings
-- `src/rl_dda_demo_back/db/`: DB engine/session and metadata base
-- `src/rl_dda_demo_back/api/`: Routers and schemas
+- `src/main.py`: FastAPI app entry
+- `src/config.py`: Settings
+- `src/db/`: DB engine/session and metadata base
+- `src/api/`: Routers and schemas
 
 ## Database and migrations
 
