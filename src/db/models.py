@@ -8,6 +8,7 @@ from sqlalchemy import (
     JSON,
     BigInteger,
     DateTime,
+    Float,
     ForeignKey,
     Index,
     Integer,
@@ -133,4 +134,34 @@ class Assignment(Base):
     arm: Mapped[str] = mapped_column(String(32), nullable=False)
     assigned_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=datetime.utcnow, nullable=False
+    )
+
+
+class GamePlay(Base):
+    __tablename__ = "gameplays"
+
+    id: Mapped[str] = mapped_column(CHAR(32), primary_key=True, default=uuid_pk)
+    nickname: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    score: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
+    final_stage: Mapped[int] = mapped_column(Integer, nullable=False)
+    model_id: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+
+    # 통계 데이터
+    total_frames: Mapped[Optional[int]] = mapped_column(Integer)
+    play_duration: Mapped[Optional[float]] = mapped_column(Float)  # 초 단위
+    enemies_destroyed: Mapped[Optional[int]] = mapped_column(Integer)
+    shots_fired: Mapped[Optional[int]] = mapped_column(Integer)
+    hits: Mapped[Optional[int]] = mapped_column(Integer)
+    deaths: Mapped[Optional[int]] = mapped_column(Integer)
+
+    # 프레임 데이터는 JSON으로 저장 (LONGTEXT 사용)
+    frames_data: Mapped[Optional[list[dict[str, Any]]]] = mapped_column(JSON)
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=datetime.utcnow, nullable=False, index=True
+    )
+
+    __table_args__ = (
+        Index("ix_gameplays_score_created", "score", "created_at"),
+        Index("ix_gameplays_model_score", "model_id", "score"),
     )
