@@ -1,11 +1,18 @@
 from datetime import datetime, timezone
+from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy import desc, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ...db.models import GamePlay
 from ...db.session import get_db_session
-from ..schemas import GamePlaySubmitRequest, GamePlaySubmitResponse
+from ..schemas import (
+    GamePlayRankingItem,
+    GamePlayRankingResponse,
+    GamePlaySubmitRequest,
+    GamePlaySubmitResponse,
+)
 
 router = APIRouter(prefix="/gameplay", tags=["gameplay"])
 
@@ -61,3 +68,73 @@ async def submit_gameplay(
             detail=f"게임 플레이 데이터 저장 중 오류가 발생했습니다: {str(e)}",
         )
 
+
+@router.get("/rankings", response_model=GamePlayRankingResponse)
+async def get_rankings(
+    page: int = Query(1, ge=1, description="페이지 번호 (1부터 시작)"),
+    page_size: int = Query(10, ge=1, le=100, description="페이지당 항목 수 (최대 100)"),
+    model_id: Optional[str] = Query(
+        None, description="특정 모델로 필터링 (예: beginner, intermediate, advanced)"
+    ),
+    db: AsyncSession = Depends(get_db_session),
+) -> GamePlayRankingResponse:
+    """
+    게임 플레이 랭킹을 조회합니다.
+
+    - **page**: 페이지 번호 (1부터 시작)
+    - **page_size**: 페이지당 항목 수 (기본 10, 최대 100)
+    - **model_id**: 특정 모델로 필터링 (선택 사항)
+
+    점수 기준 내림차순으로 정렬되며, 동점일 경우 먼저 등록된 순서로 정렬됩니다.
+    """
+    try:
+        # 기본 쿼리 구성
+        base_query = select(GamePlay)
+        count_query = select(func.count(GamePlay.id))
+
+        # 모델별 필터링
+        if model_id:
+            base_query = base_query.where(GamePlay.model_id == model_id)
+            count_query = count_query.where(GamePlay.model_id == model_id)
+
+        # 전체 개수 조회
+        total_result = await db.execute(count_query)
+        total = total_result.scalar_one()
+
+        # 랭킹 조회 (점수 내림차순, 동점일 경우 생성일 오름차순)
+        offset = (page - 1) * page_size
+        rankings_query = (
+            base_query.order_by(desc(GamePlay.score), GamePlay.created_at)
+            .limit(page_size)
+            .offset(offset)
+        )
+
+        result = await db.execute(rankings_query)
+        gameplays = result.scalars().all()
+
+        # 랭킹 아이템 생성
+        rankings = [
+            GamePlayRankingItem(
+                id=gp.id,
+                nickname=gp.nickname,
+                score=gp.score,
+                final_stage=gp.final_stage,
+                model_id=gp.model_id,
+                created_at=gp.created_at.isoformat() if gp.created_at else "",
+                rank=offset + idx + 1,
+            )
+            for idx, gp in enumerate(gameplays)
+        ]
+
+        return GamePlayRankingResponse(
+            rankings=rankings,
+            total=total,
+            page=page,
+            page_size=page_size,
+        )
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"랭킹 조회 중 오류가 발생했습니다: {str(e)}",
+        )

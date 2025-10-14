@@ -73,3 +73,20 @@ class GamePlaySubmitRequest(BaseModel):
 class GamePlaySubmitResponse(BaseModel):
     id: str
     message: str
+
+
+class GamePlayRankingItem(BaseModel):
+    id: str
+    nickname: str
+    score: int
+    final_stage: int
+    model_id: str
+    created_at: str
+    rank: int
+
+
+class GamePlayRankingResponse(BaseModel):
+    rankings: list[GamePlayRankingItem]
+    total: int
+    page: int
+    page_size: int
