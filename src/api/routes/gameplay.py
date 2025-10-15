@@ -88,8 +88,15 @@ async def get_rankings(
     점수 기준 내림차순으로 정렬되며, 동점일 경우 먼저 등록된 순서로 정렬됩니다.
     """
     try:
-        # 기본 쿼리 구성
-        base_query = select(GamePlay)
+        # 기본 쿼리 구성 - 랭킹에 필요한 컬럼만 선택 (frames_data 제외)
+        base_query = select(
+            GamePlay.id,
+            GamePlay.nickname,
+            GamePlay.score,
+            GamePlay.final_stage,
+            GamePlay.model_id,
+            GamePlay.created_at,
+        )
         count_query = select(func.count(GamePlay.id))
 
         # 모델별 필터링
@@ -110,20 +117,20 @@ async def get_rankings(
         )
 
         result = await db.execute(rankings_query)
-        gameplays = result.scalars().all()
+        rows = result.all()
 
         # 랭킹 아이템 생성
         rankings = [
             GamePlayRankingItem(
-                id=gp.id,
-                nickname=gp.nickname,
-                score=gp.score,
-                final_stage=gp.final_stage,
-                model_id=gp.model_id,
-                created_at=gp.created_at.isoformat() if gp.created_at else "",
+                id=row.id,
+                nickname=row.nickname,
+                score=row.score,
+                final_stage=row.final_stage,
+                model_id=row.model_id,
+                created_at=row.created_at.isoformat() if row.created_at else "",
                 rank=offset + idx + 1,
             )
-            for idx, gp in enumerate(gameplays)
+            for idx, row in enumerate(rows)
         ]
 
         return GamePlayRankingResponse(

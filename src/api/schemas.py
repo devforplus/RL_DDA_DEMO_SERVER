@@ -65,7 +65,7 @@ class GamePlaySubmitRequest(BaseModel):
     nickname: str
     score: int
     final_stage: int
-    model_id: str
+    model_id: Optional[str] = None
     statistics: GamePlayStatistics
     frames: list[GamePlayFrame]
 
@@ -80,7 +80,7 @@ class GamePlayRankingItem(BaseModel):
     nickname: str
     score: int
     final_stage: int
-    model_id: str
+    model_id: Optional[str]
     created_at: str
     rank: int
 
