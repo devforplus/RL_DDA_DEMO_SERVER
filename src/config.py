@@ -5,7 +5,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", env_prefix="APP_", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=".env", env_prefix="APP_", extra="ignore"
+    )
 
     app_name: str = "rl-dda-demo-back"
 
@@ -19,8 +21,16 @@ class Settings(BaseSettings):
     # Optional full DSN override
     database_url: Optional[str] = None
 
-    # CORS
-    cors_origins: List[str] = []
+    # CORS - 명시적 허용 도메인
+    cors_origins: List[str] = [
+        "https://devfor.plus",
+        "https://www.devfor.plus",
+        "http://localhost:5173",  # 로컬 개발
+        "http://localhost:3000",  # 대체 로컬 포트
+    ]
+
+    # CORS - 정규식 패턴 (Vercel 프리뷰 배포 등)
+    cors_origin_regex: Optional[str] = r"https://.*\.vercel\.app"
 
     # Ingest token
     ingest_secret: str = "change-me"
@@ -36,9 +46,7 @@ class Settings(BaseSettings):
     def sqlalchemy_dsn(self) -> str:
         if self.database_url:
             return self.database_url
-        return (
-            f"mysql+aiomysql://{self.db_user}:{self.db_password}@{self.db_host}:{self.db_port}/{self.db_name}"
-        )
+        return f"mysql+aiomysql://{self.db_user}:{self.db_password}@{self.db_host}:{self.db_port}/{self.db_name}"
 
 
 @lru_cache(maxsize=1)
@@ -47,5 +55,3 @@ def get_settings() -> Settings:
 
 
 settings = get_settings()
-
-
