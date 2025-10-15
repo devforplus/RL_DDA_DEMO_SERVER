@@ -27,7 +27,7 @@ def upgrade() -> None:
         sa.Column("nickname", sa.String(length=64), nullable=False),
         sa.Column("score", sa.Integer(), nullable=False),
         sa.Column("final_stage", sa.Integer(), nullable=False),
-        sa.Column("model_id", sa.String(length=32), nullable=False),
+        sa.Column("model_id", sa.String(length=32), nullable=True),
         sa.Column("total_frames", sa.Integer(), nullable=True),
         sa.Column("play_duration", sa.Float(), nullable=True),
         sa.Column("enemies_destroyed", sa.Integer(), nullable=True),
