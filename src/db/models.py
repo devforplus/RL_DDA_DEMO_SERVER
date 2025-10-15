@@ -144,7 +144,9 @@ class GamePlay(Base):
     nickname: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
     score: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
     final_stage: Mapped[int] = mapped_column(Integer, nullable=False)
-    model_id: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+    model_id: Mapped[Optional[str]] = mapped_column(
+        String(32), nullable=True, index=True
+    )
 
     # 통계 데이터
     total_frames: Mapped[Optional[int]] = mapped_column(Integer)
