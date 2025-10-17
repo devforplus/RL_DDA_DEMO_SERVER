@@ -7,7 +7,7 @@ compatibility_flags = ["nodejs_compat"]
 [[d1_databases]]
 binding = "DB"
 database_name = "rl-dda-demo-db"
-database_id = "" # 로컬 개발시에는 자동 생성됨
+database_id = "6fb4e9be-5ec1-48f3-ba8a-e0e15993ebcb" # 로컬 개발시 빈 문자열, 프로덕션 배포 시 실제 ID로 변경
 
 # R2 Storage (S3 호환)
 [[r2_buckets]]

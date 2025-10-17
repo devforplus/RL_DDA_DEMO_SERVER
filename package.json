@@ -10,7 +10,8 @@
     "db:migrate": "wrangler d1 migrations apply rl-dda-demo-db --local",
     "db:migrate:prod": "wrangler d1 migrations apply rl-dda-demo-db --remote",
     "db:studio": "drizzle-kit studio",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "logs": "wrangler tail"
   },
   "keywords": ["cloudflare", "workers", "d1", "r2", "hono"],
   "author": "dlwlgusdev <dlwlgusdev@gmail.com>",
