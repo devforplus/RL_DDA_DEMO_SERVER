@@ -19,5 +19,5 @@ bucket_name = "rl-dda-demo-replays"
 APP_NAME = "rl-dda-demo-back"
 INGEST_SECRET = "change-me"
 CORS_ORIGINS = '["https://devfor.plus","https://www.devfor.plus","http://localhost:5173","http://localhost:3000"]'
-CORS_ORIGIN_REGEX = "https://.*\\.vercel\\.app"
+CORS_ORIGIN_REGEX = "https://.*\\.(devfor\\.plus|vercel\\.app)"
 
