@@ -1,0 +1,23 @@
+name = "rl-dda-demo-back"
+main = "worker/index.ts"
+compatibility_date = "2025-10-17"
+compatibility_flags = ["nodejs_compat"]
+
+# D1 Database
+[[d1_databases]]
+binding = "DB"
+database_name = "rl-dda-demo-db"
+database_id = "" # 로컬 개발시에는 자동 생성됨
+
+# R2 Storage (S3 호환)
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "rl-dda-demo-replays"
+
+# 환경 변수
+[vars]
+APP_NAME = "rl-dda-demo-back"
+INGEST_SECRET = "change-me"
+CORS_ORIGINS = '["https://devfor.plus","https://www.devfor.plus","http://localhost:5173","http://localhost:3000"]'
+CORS_ORIGIN_REGEX = "https://.*\\.vercel\\.app"
+

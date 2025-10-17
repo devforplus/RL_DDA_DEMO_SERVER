@@ -1,0 +1,32 @@
+{
+  "name": "rl_dda_demo_back",
+  "version": "1.0.0",
+  "description": "Backend service for RL DDA demo - Cloudflare Workers + D1 + R2",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "wrangler d1 migrations apply rl-dda-demo-db --local",
+    "db:migrate:prod": "wrangler d1 migrations apply rl-dda-demo-db --remote",
+    "db:studio": "drizzle-kit studio",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": ["cloudflare", "workers", "d1", "r2", "hono"],
+  "author": "dlwlgusdev <dlwlgusdev@gmail.com>",
+  "license": "ISC",
+  "packageManager": "pnpm@10.11.0",
+  "dependencies": {
+    "@hono/zod-validator": "^0.7.4",
+    "drizzle-orm": "^0.44.6",
+    "hono": "^4.10.0",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20251011.0",
+    "@types/node": "^24.8.1",
+    "drizzle-kit": "^0.31.5",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.43.0"
+  }
+}

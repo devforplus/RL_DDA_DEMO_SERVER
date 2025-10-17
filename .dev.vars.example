@@ -1,0 +1,6 @@
+# 로컬 개발용 환경 변수 예시
+# 실제 사용 시 .dev.vars 파일로 복사하고 값을 수정하세요
+# .dev.vars는 .gitignore에 포함되어 있습니다
+
+INGEST_SECRET=change-me-to-a-secure-random-string
+

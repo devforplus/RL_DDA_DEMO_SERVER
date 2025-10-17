@@ -11,3 +11,18 @@ wheels/
 
 # env
 .env
+
+# Node.js / pnpm
+node_modules/
+.pnpm-store/
+pnpm-lock.yaml
+
+# Wrangler
+.wrangler/
+.dev.vars
+
+# TypeScript
+*.tsbuildinfo
+
+# Cloudflare
+.mf/
