@@ -11,12 +11,23 @@ type Env = {
 
 const gameplayRouter = new Hono<{ Bindings: Env }>();
 
+// 중복을 방지할 AI 에이전트 닉네임 목록
+const AI_AGENT_NICKNAMES = ['beginner', 'medium', 'master'];
+
 gameplayRouter.post('', zValidator('json', gamePlaySubmitRequestSchema), async (c) => {
   const body = c.req.valid('json');
   const db = drizzle(c.env.DB);
   
   try {
-    // 게임플레이 데이터 삽입
+    // AI 에이전트 닉네임인 경우, 저장하지 않고 성공 응답 반환
+    if (AI_AGENT_NICKNAMES.includes(body.nickname)) {
+      return c.json({
+        id: 'skipped-ai-agent',
+        message: `AI 에이전트(${body.nickname})의 데이터는 저장되지 않았습니다.`,
+      });
+    }
+
+    // 일반 유저인 경우 새로 삽입
     const result = await db.insert(gameplays).values({
       nickname: body.nickname,
       score: body.score,
