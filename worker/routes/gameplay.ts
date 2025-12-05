@@ -93,6 +93,8 @@ gameplayRouter.get('/rankings', async (c) => {
         score: gameplays.score,
         finalStage: gameplays.finalStage,
         modelId: gameplays.modelId,
+        totalFrames: gameplays.totalFrames,
+        playDuration: gameplays.playDuration,
         createdAt: gameplays.createdAt,
       })
       .from(gameplays)
@@ -108,6 +110,8 @@ gameplayRouter.get('/rankings', async (c) => {
       score: row.score,
       final_stage: row.finalStage,
       model_id: row.modelId,
+      total_frames: row.totalFrames,
+      play_duration: row.playDuration,
       created_at: row.createdAt ? new Date(row.createdAt).toISOString() : '',
       rank: offset + idx + 1,
     }));

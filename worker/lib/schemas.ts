@@ -127,6 +127,8 @@ export const gamePlayRankingItemSchema = z.object({
   score: z.number().int(),
   final_stage: z.number().int(),
   model_id: z.string().nullable(),
+  total_frames: z.number().int().optional(),
+  play_duration: z.number().optional(),
   created_at: z.string(),
   rank: z.number().int(),
 });

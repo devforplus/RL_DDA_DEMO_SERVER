@@ -95,6 +95,8 @@ async def get_rankings(
             GamePlay.score,
             GamePlay.final_stage,
             GamePlay.model_id,
+            GamePlay.total_frames,
+            GamePlay.play_duration,
             GamePlay.created_at,
         )
         count_query = select(func.count(GamePlay.id))
@@ -127,6 +129,8 @@ async def get_rankings(
                 score=row.score,
                 final_stage=row.final_stage,
                 model_id=row.model_id,
+                total_frames=row.total_frames,
+                play_duration=row.play_duration,
                 created_at=row.created_at.isoformat() if row.created_at else "",
                 rank=offset + idx + 1,
             )

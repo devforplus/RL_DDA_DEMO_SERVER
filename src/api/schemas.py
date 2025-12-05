@@ -81,6 +81,8 @@ class GamePlayRankingItem(BaseModel):
     score: int
     final_stage: int
     model_id: Optional[str]
+    total_frames: Optional[int] = None
+    play_duration: Optional[float] = None
     created_at: str
     rank: int
 
